@@ -1,12 +1,33 @@
+var IncrementoX = 101;
+var IncrementoY = 85;
+
+ function getRandom (min,max){
+    
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
+    // we've provided one for you to get started 
+    
+    this.x = 0;;
+    this.y = 60;
+    this.speed = Math.random() * 5;
+    this.height =50;
+    this.width = 85;
+    
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 };
+
+Enemy.prototype.collisions = function(object){
+    return (this.x < object.x + object.width && this.x + this.width > object.x &&
+        this.y < object.y + object.height && this.y + this.height > object.y); 
+       
+};
+
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -14,6 +35,25 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    var location = [90,130,220];
+    this.x += (dt * IncrementoX * this.speed);
+    if(this.x > 480){
+        this.x = -190;
+        this.y = location[getRandom(0,2)];
+        this.speed = Math.random() * 5;   
+        
+    }
+     if(this.collisions(player)){
+         player.reset();
+         alert("Perdiste,intentalo de nuevo");
+     }
+    
+    Enemy.prototype.reset = function(){
+        
+        this.x = 0;
+        this.y = 406;
+    }
+    
 };
 
 // Draw the enemy on the screen, required method for game
@@ -25,10 +65,101 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
+var Player = function(){
+    
+    this.x = 202;
+    this.y = 406;
+    this.height = 75;
+    this.width = 50;
+	this.sprite = 'images/char-princess-girl.png';
+}
+	
+Player.prototype.reset = function(){
+	this.x = 202;
+    this.y = 406;
+}
+    
+Player.prototype.update = function(){       
+        if(this.y < 0){
+            this.reset();
+            alert("ganaste");
+          }  
+     
+ };
+        
+ Player.prototype.render = function(){
+            ctx.drawImage(Resources.get(this.sprite), this.x, this.y);              
+ };
+   
+//Player.prototype.Menu = function(){
+//    
+//    switch(Player){
+//            
+//        case 'images/char-boy.png':
+//               prompt('images/char-boy.png');
+//            break;
+//            
+//        case 'images/char-pink-girl.png':
+//            prompt('images/char-pink-girl.png');
+//            break;
+//            
+//        case 'images/char-princess-girl.png':
+//            break;
+//            
+//        case 'images/char-horn-girl.png':
+//            break;
+//            
+//        case 'images/char-cat-girl.png':
+//            break;
+//            
+//    }
+   
+
+Player.prototype.handleInput = function(Player){
+    
+        switch(Player){
+                
+         case 'left':
+                if(this.x > 0){
+                    this.x -= IncrementoX;      
+                }
+                break;
+				
+        case  'right':
+                if(this.x < 404){
+                    this.x += IncrementoX;    
+                }
+                break;
+				
+        case 'up':
+                if(this.y > 0){
+                    this.y -= IncrementoY;
+                    
+                }
+                break;
+        
+		case 'down':
+                if(this.y < 404){
+                    this.y += IncrementoY;
+                      
+                }
+                break;                
+        }                 
+};
+
+
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+var allEnemies = [];
+
+for( var i = 0; i < 3; i++){
+    var enemies = new Enemy();
+    allEnemies[i] = enemies; 
+}
+var player = new Player(); 
+
 
 
 
