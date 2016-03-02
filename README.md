@@ -1,4 +1,4 @@
-# Frogger INTEC
+# Frogger INTEC  modfificado
 
 Creando un frogger en Javascript para la asignatura Diseño y programación de Videojuegos en INTEC, Santo Domingo República Dominicana.
 
